@@ -1,5 +1,7 @@
 # Импортируем WebDriver, чтобы с ним взаимодействовать:
 # открывать браузер и производить различные дествия
+import time
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
@@ -16,3 +18,5 @@ driver.get(base_url)
 
 # Установка размеров окна браузера
 driver.set_window_size(1920, 1080)
+time.sleep(10)
+driver.close()
