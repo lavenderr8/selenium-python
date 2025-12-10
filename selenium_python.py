@@ -20,13 +20,14 @@ driver.get(base_url)
 # Установка размеров окна браузера
 driver.set_window_size(1920, 1080)
 
-# Переменные, с помощью которых будет осуществляться поиск локаторов
-user_name = driver.find_element(By.ID, "user-name")
-user_password = driver.find_element(By.ID, "password")
+# Поиск локаторов с помощью XPATH
+user_name = driver.find_element(By.ID, "//input[@id='user-name']")
+user_password = driver.find_element(By.NAME, "//h4[contains(text()='Password for all')]")
 
 # Метод, для автоматического заполнения полей конкретными значениями
 user_name.send_keys("visual_user")
 user_password.send_keys("secret_sauce")
 
+# Автоматическое закрытие сайта через 10 сек.
 time.sleep(10)
 driver.close()
