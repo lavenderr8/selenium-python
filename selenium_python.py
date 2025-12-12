@@ -25,17 +25,15 @@ user_name = driver.find_element(By.ID, 'user-name')
 user_password = driver.find_element(By.ID, 'password')
 button_login = driver.find_element(By.ID, 'login-button')
 
-# Метод, для автоматического заполнения полей конкретными значениями
-user_name.send_keys("visual_user")
-user_password.send_keys("secret_sauce")
-
-# Метод click() для осуществления клика по кнопке
-button_login.click()
-
-# Опишем выполнение шагов с помощью функции print()
+# Логируем и выполняем действия
 print("Input Login")
+user_name.send_keys("visual_user")  # Метод send_keys() для автоматического заполнения поля "Username"
+
 print("Input Password")
+user_password.send_keys("secret_sauce")  # Метод send_keys() для автоматического заполнения поля "Password"
+
 print("Click Login Button")
+button_login.click()  # Метод click() для осуществления клика по кнопке
 
 # Выведем на печать наш url
 print(driver.current_url)
@@ -47,7 +45,7 @@ get_url = driver.current_url
 url = 'https://www.saucedemo.com/inventory.html'
 
 # Сравнение ожидаемого результата и фактического с помощью оператора assert
-assert url == get_url
+assert url == get_url, f"Ошибка: ожидаетмя URL '{url}', но получен '{get_url}'"
 
 # Визуальное подтверждение успешного прохождения проверки
 print("URL корректен")
@@ -55,11 +53,13 @@ print("URL корректен")
 # Проверим дополнительно, что находимся на странице каталога
 text_products = driver.find_element(By.XPATH, "//span[@class='title']")
 
-value_text_products = text_products.text    # Создадим переменную и
-print(value_text_products)                  # выведем текст заголовка
+value_text_products = text_products.text  # Создадим переменную и
+print(value_text_products)  # выведем текст заголовка
 
-assert value_text_products == 'Products'    # Сравнение заголовка с ожидаемым результатом и
-print("Заголовок корректен")                # вывод текста об успешном прохождении проверки
+assert value_text_products == 'Products', (
+    f"Ошибка: ожидается заголовок 'Products', но получен '{value_text_products}'"
+)  # Сравнение заголовка с ожидаемым результатом и
+print("Заголовок корректен")  # вывод текста об успешном прохождении проверки
 
 # Автоматическое закрытие сайта через 10 сек.
 time.sleep(10)
