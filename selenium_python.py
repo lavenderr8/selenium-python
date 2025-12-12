@@ -9,6 +9,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 options = webdriver.ChromeOptions()
 options.add_experimental_option("detach", True)
+
+# Аргумент для запуска браузера в headless режиме (не открывая браузер)
+options.add_argument("--headless")
 driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
 
 # Базовый URL для открытия
@@ -25,15 +28,15 @@ user_name = driver.find_element(By.ID, 'user-name')
 user_password = driver.find_element(By.ID, 'password')
 button_login = driver.find_element(By.ID, 'login-button')
 
-# Логируем и выполняем действия
-print("Input Login")
+# Выполняем действия и логируем
 user_name.send_keys("visual_user")  # Метод send_keys() для автоматического заполнения поля "Username"
+print("Input Login")
 
-print("Input Password")
 user_password.send_keys("secret_sauce")  # Метод send_keys() для автоматического заполнения поля "Password"
+print("Input Password")
 
-print("Click Login Button")
 button_login.click()  # Метод click() для осуществления клика по кнопке
+print("Click Login Button")
 
 # Выведем на печать наш url
 print(driver.current_url)
