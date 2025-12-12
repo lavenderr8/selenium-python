@@ -11,7 +11,7 @@ options = webdriver.ChromeOptions()
 options.add_experimental_option("detach", True)
 
 # Аргумент для запуска браузера в headless режиме (не открывая браузер)
-options.add_argument("--headless")
+# options.add_argument("--headless")
 driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
 
 # Базовый URL для открытия
@@ -32,38 +32,54 @@ button_login = driver.find_element(By.ID, 'login-button')
 user_name.send_keys("visual_user")  # Метод send_keys() для автоматического заполнения поля "Username"
 print("Input Login")
 
-user_password.send_keys("secret_sauce")  # Метод send_keys() для автоматического заполнения поля "Password"
+user_password.send_keys("qwerty")  # Метод send_keys() для автоматического заполнения поля "Password"
 print("Input Password")
 
 button_login.click()  # Метод click() для осуществления клика по кнопке
 print("Click Login Button")
 
-# Выведем на печать наш url
-print(driver.current_url)
+# # Выведем на печать наш url
+# print(driver.current_url)
+#
+# # И сохраним url в переменную
+# get_url = driver.current_url
+#
+# # Переменная с адресом нашей страницы
+# url = 'https://www.saucedemo.com/inventory.html'
+#
+# # Сравнение ожидаемого результата и фактического с помощью оператора assert
+# assert url == get_url, f"Ошибка: ожидается URL '{url}', но получен '{get_url}'"
+#
+# # Визуальное подтверждение успешного прохождения проверки
+# print("URL корректен")
 
-# И сохраним url в переменную
-get_url = driver.current_url
+# Дополнительная проверка на текст
+warning_text = driver.find_element(By.XPATH, "//h3[@data-test='error']")
 
-# Переменная с адресом нашей страницы
-url = 'https://www.saucedemo.com/inventory.html'
+value_warning_text = warning_text.text  # Создадим переменную
 
-# Сравнение ожидаемого результата и фактического с помощью оператора assert
-assert url == get_url, f"Ошибка: ожидаетмя URL '{url}', но получен '{get_url}'"
+assert value_warning_text == 'Epic sadface: Username and password do not match any user in this service', (
+    f"""Ошибка: ожидается сообщение 'Epic sadface: Username and password do not match any user in this service',
+    но получено '{value_warning_text}'"""  # Сравнение сообщения с ожидаемым результатом и
+)
+print("Сообщение корректно.")  # вывод текста об успешном прохождении проверки
 
-# Визуальное подтверждение успешного прохождения проверки
-print("URL корректен")
+# Автоклик по крестику в сообщении об ошибке
+error_button = driver.find_element(By.XPATH, "//button[@class='error-button']")
+error_button.click()
+print("Click Error Button")
 
-# Проверим дополнительно, что находимся на странице каталога
-text_products = driver.find_element(By.XPATH, "//span[@class='title']")
-
-value_text_products = text_products.text  # Создадим переменную и
-print(value_text_products)  # выведем текст заголовка
-
-assert value_text_products == 'Products', (
-    f"Ошибка: ожидается заголовок 'Products', но получен '{value_text_products}'"
-)  # Сравнение заголовка с ожидаемым результатом и
-print("Заголовок корректен")  # вывод текста об успешном прохождении проверки
+# # Проверим дополнительно, что находимся на странице каталога
+# text_products = driver.find_element(By.XPATH, "//span[@class='title']")
+#
+# value_text_products = text_products.text  # Создадим переменную и
+# print(value_text_products)  # выведем текст заголовка
+#
+# assert value_text_products == 'Products', (
+#     f"Ошибка: ожидается заголовок 'Products', но получен '{value_text_products}'"
+# )  # Сравнение заголовка с ожидаемым результатом и
+# print("Заголовок корректен")  # вывод текста об успешном прохождении проверки
 
 # Автоматическое закрытие сайта через 10 сек.
-time.sleep(10)
-driver.close()
+# time.sleep(10)
+# driver.close()
