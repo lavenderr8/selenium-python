@@ -1,5 +1,8 @@
 # Импортируем WebDriver, чтобы с ним взаимодействовать:
 # открывать браузер и производить различные дествия
+import time
+import datetime
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
@@ -9,7 +12,7 @@ options = webdriver.ChromeOptions()
 options.add_experimental_option("detach", True)
 
 # Аргумент для запуска браузера в headless режиме (не открывая браузер)
-options.add_argument("--headless")
+# options.add_argument("--headless")
 driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
 
 # Базовый URL для открытия
@@ -27,14 +30,22 @@ user_password = driver.find_element(By.ID, 'password')
 button_login = driver.find_element(By.ID, 'login-button')
 
 # Выполняем действия и логируем
-user_name.send_keys("visual_user")  # Метод send_keys() для автоматического заполнения поля "Username"
+user_name.send_keys('visual_user')  # Метод send_keys() для автоматического заполнения поля "Username"
 print("Input Login")
 
-user_password.send_keys("qwerty")  # Метод send_keys() для автоматического заполнения поля "Password"
+user_password.send_keys('qwerty')  # Метод send_keys() для автоматического заполнения поля "Password"
 print("Input Password")
 
 button_login.click()  # Метод click() для осуществления клика по кнопке
 print("Click Login Button")
+
+# Уникальное название скриншота
+now_date = datetime.datetime.now().strftime("%Y.%m.%d-%H.%M.%S")
+name_screenshot = 'screenshot' + now_date + '.png'
+
+# Метод для скриншота окна браузера
+driver.save_screenshot('C:\\Users\\varenka\\repositories\\selenium_python\\screen\\' + name_screenshot)
+print("Скриншот сохранён в папке 'screen'")
 
 # Дополнительная проверка на текст
 warning_text = driver.find_element(By.XPATH, "//h3[@data-test='error']")
@@ -51,3 +62,6 @@ print("Сообщение корректно.")  # вывод текста об 
 error_button = driver.find_element(By.XPATH, "//button[@class='error-button']")
 error_button.click()
 print("Click Error Button")
+
+time.sleep(6)
+driver.close()
