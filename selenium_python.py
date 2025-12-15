@@ -33,7 +33,7 @@ button_login = driver.find_element(By.ID, 'login-button')
 user_name.send_keys('visual_user')  # Метод send_keys() для автоматического заполнения поля "Username"
 print("Input Login")
 
-user_password.send_keys('qwerty')  # Метод send_keys() для автоматического заполнения поля "Password"
+user_password.send_keys('secret_sauce')  # Метод send_keys() для автоматического заполнения поля "Password"
 print("Input Password")
 
 button_login.click()  # Метод click() для осуществления клика по кнопке
