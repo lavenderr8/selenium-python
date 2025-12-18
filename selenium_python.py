@@ -37,13 +37,13 @@ button_login.click()  # Метод click() для осуществления к�
 print("Click Login Button")
 
 # Добавление товаров и переход в корзину с помощью click()
-button_add_labs_backpack = driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-backpack']").click()
-button_add_bike_light = driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-bike-light']").click()
-button_add_bolt_t_shirt = driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-bolt-t-shirt']").click()
-button_add_fleece_jacket = driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-fleece-jacket']").click()
-button_add_onesie = driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-onesie']").click()
-button_add_t_shirt_red = driver.find_element(By.XPATH, "//button[@id='add-to-cart-test.allthethings()-t-shirt-(red)']").click()
-button_cart = driver.find_element(By.XPATH, "a[@data-test='shopping-cart-link']").click()
+driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-backpack']").click()
+driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-bike-light']").click()
+driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-bolt-t-shirt']").click()
+driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-fleece-jacket']").click()
+driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-onesie']").click()
+driver.find_element(By.XPATH, "//button[@id='add-to-cart-test.allthethings()-t-shirt-(red)']").click()
+driver.find_element(By.XPATH, "a[@data-test='shopping-cart-link']").click()
 
 # Скроллинг с помощью наведения по локатору
 actions = ActionChains(driver)
