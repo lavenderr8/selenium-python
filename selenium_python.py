@@ -3,6 +3,7 @@
 import time
 
 from selenium import webdriver
+from selenium.webdriver import Keys
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
@@ -27,29 +28,32 @@ user_password = driver.find_element(By.ID, 'password')
 button_login = driver.find_element(By.ID, 'login-button')
 
 # Выполняем действия и логируем
+user_name.send_keys('qwerty')  # Метод send_keys() для автоматического заполнения поля "Username"
+print("Input Login")
+
+user_password.send_keys('123456')  # Метод send_keys() для автоматического заполнения поля "Password"
+print("Input Password")
+
+# Выделение полей: логин и пароль- и удаление значения полей
+time.sleep(3)
+
+user_name.send_keys(Keys.CONTROL + "a")    # Для поля логин
+user_name.send_keys(Keys.DELETE)
+
+user_password.send_keys(Keys.CONTROL + "a")    # Для поля пароль
+user_password.send_keys(Keys.DELETE)
+
+time.sleep(3)
 user_name.send_keys('standard_user')  # Метод send_keys() для автоматического заполнения поля "Username"
 print("Input Login")
 
 user_password.send_keys('secret_sauce')  # Метод send_keys() для автоматического заполнения поля "Password"
 print("Input Password")
 
+time.sleep(2)
 button_login.click()  # Метод click() для осуществления клика по кнопке
 print("Click Login Button")
 
-# Добавление товаров и переход в корзину с помощью click()
-driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-backpack']").click()
-driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-bike-light']").click()
-driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-bolt-t-shirt']").click()
-driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-fleece-jacket']").click()
-driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-onesie']").click()
-driver.find_element(By.XPATH, "//button[@id='add-to-cart-test.allthethings()-t-shirt-(red)']").click()
-driver.find_element(By.XPATH, "a[@data-test='shopping-cart-link']").click()
-
-# Скроллинг с помощью наведения по локатору
-actions = ActionChains(driver)
-element = driver.find_element(By.ID, 'item_3_title_link')
-actions.move_to_element(element).perform()
-
 # Автоматическое закрытие сайта через 6 сек
-time.sleep(6)
+time.sleep(3)
 driver.close()
