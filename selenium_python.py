@@ -3,6 +3,7 @@
 import time
 
 from selenium import webdriver
+from selenium.webdriver import Keys
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
@@ -24,25 +25,38 @@ driver.maximize_window()
 user_name = driver.find_element(By.ID, 'user-name')
 user_password = driver.find_element(By.ID, 'password')
 button_login = driver.find_element(By.ID, 'login-button')
-menu = driver.find_element(By.ID, 'react-burger-menu-btn')
-logout_button = driver.find_element(By.ID, 'logout_sidebar_link')
 
 # Выполняем действия и логируем
-user_name.send_keys('standard_user')  # Метод send_keys() для автоматического заполнения поля "Username"
+user_name.send_keys('qwerty')  # Метод send_keys() для автоматического заполнения поля "Username" неверным значением
 print("Input Login")
 
-user_password.send_keys('secret_sauce')  # Метод send_keys() для автоматического заполнения поля "Password"
+user_password.send_keys('123456')  # Метод send_keys() для автоматического заполнения поля "Password" неверным значением
 print("Input Password")
 
-# Метод click() для осуществления клика по кнопке
+# Выделение полей: логин и пароль- и удаление значения полей
+time.sleep(3)
+
+user_name.send_keys(Keys.CONTROL + "a")  # Выделить поле логин
+time.sleep(3)
+user_name.send_keys(Keys.DELETE)  # Удалить неверное значение поля логин
+
+user_password.send_keys(Keys.CONTROL + "a")  # Выделить поле пароль
+time.sleep(3)
+user_password.send_keys(Keys.DELETE)  # Удалить неверное значение поля пароль
+
+# Заполнение полей верными значениями
+time.sleep(3)
+user_name.send_keys(
+    'standard_user')  # Метод send_keys() для автоматического заполнения поля "Username" верным значением
+print("Input Login")
+
+user_password.send_keys(
+    'secret_sauce')  # Метод send_keys() для автоматического заполнения поля "Password" верным значением
+print("Input Password")
+
 time.sleep(2)
-button_login.click()    # Клик по кнопке login
+button_login.click()  # Метод click() для осуществления клика по кнопке
 print("Click Login Button")
-
-menu.click()    # Клик по кнопке меню
-
-time.sleep(2)
-logout_button.click()   # Клик по кнопке logout
 
 # Автоматическое закрытие сайта через 6 сек
 time.sleep(3)
