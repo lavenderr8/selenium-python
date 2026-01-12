@@ -3,7 +3,6 @@
 import time
 
 from selenium import webdriver
-from selenium.webdriver import Keys
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
@@ -27,36 +26,31 @@ user_password = driver.find_element(By.ID, 'password')
 button_login = driver.find_element(By.ID, 'login-button')
 
 # Выполняем действия и логируем
-user_name.send_keys('qwerty')  # Метод send_keys() для автоматического заполнения поля "Username" неверным значением
+user_name.send_keys('standard_user')  # Метод send_keys() для автоматического заполнения поля "Username"
 print("Input Login")
 
-user_password.send_keys('123456')  # Метод send_keys() для автоматического заполнения поля "Password" неверным значением
-print("Input Password")
-
-# Выделение полей: логин и пароль- и удаление значения полей
-time.sleep(3)
-
-user_name.send_keys(Keys.CONTROL + "a")  # Выделить поле логин
-time.sleep(3)
-user_name.send_keys(Keys.DELETE)  # Удалить неверное значение поля логин
-
-user_password.send_keys(Keys.CONTROL + "a")  # Выделить поле пароль
-time.sleep(3)
-user_password.send_keys(Keys.DELETE)  # Удалить неверное значение поля пароль
-
-# Заполнение полей верными значениями
-time.sleep(3)
-user_name.send_keys(
-    'standard_user')  # Метод send_keys() для автоматического заполнения поля "Username" верным значением
-print("Input Login")
-
-user_password.send_keys(
-    'secret_sauce')  # Метод send_keys() для автоматического заполнения поля "Password" верным значением
+user_password.send_keys('secret_sauce')  # Метод send_keys() для автоматического заполнения поля "Password"
 print("Input Password")
 
 time.sleep(2)
 button_login.click()  # Метод click() для осуществления клика по кнопке
 print("Click Login Button")
+
+# Добавляем товар в корзину и переходим в корзину
+time.sleep(2)
+driver.find_element(By.XPATH, "//button[@id='add-to-cart-sauce-labs-backpack']").click()
+time.sleep(2)
+driver.find_element(By.XPATH, "//a[@data-test='shopping_cart_link']").click()
+
+# Кликаем по кнопке "Назад"
+time.sleep(2)
+driver.back()
+print("Go Back")
+
+# Кликаем по кнопке "Вперёд"
+time.sleep(2)
+driver.forward()
+print("Go Forward")
 
 # Автоматическое закрытие сайта через 6 сек
 time.sleep(3)
