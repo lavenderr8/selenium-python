@@ -22,14 +22,15 @@ driver.get(base_url)
 # Установка размеров окна браузера
 driver.set_window_size(1920, 1080)
 
-# Найдём чек-бокс по локатору
-check_box = driver.find_element(By.XPATH, "//span[@class='rct-checkbox']")
+# Найдём input чек-бокса
+checkbox_input = driver.find_element(By.XPATH, "//input[@type='checkbox']")
 
-# Выполним по нему клик
+# Кликнем по визуальному чек-боксу
+check_box = driver.find_element(By.XPATH, "//span[@class='rct-checkbox']")
 check_box.click()
 
 # Проверим, что чек-бокс выбран и выведем сообщение об этом
-if check_box.is_selected():
+if checkbox_input.is_selected():
     print("Чек-бокс выбран")
 else:
     print("Чек-бокс не выбран")
