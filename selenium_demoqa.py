@@ -1,5 +1,5 @@
 # Импортируем WebDriver, чтобы с ним взаимодействовать:
-# открывать браузер и производить различные дествия
+# открывать браузер и производить различные действия
 import time
 
 from selenium import webdriver
@@ -14,7 +14,7 @@ driver = webdriver.Chrome(
 )
 
 # Базовый URL для открытия
-base_url: str = 'https://demoqa.com/checkbox'
+base_url: str = 'https://demoqa.com/radio-button'
 
 # Команда get для открытия ссылки
 driver.get(base_url)
@@ -22,18 +22,23 @@ driver.get(base_url)
 # Установка размеров окна браузера
 driver.set_window_size(1920, 1080)
 
-# Найдём input чек-бокса
-checkbox_input = driver.find_element(By.XPATH, "//input[@type='checkbox']")
+# Находим input радиокнопки "Impressive"
+radio_input = driver.find_element(By.ID, "impressiveRadio")
 
-# Кликнем по визуальному чек-боксу
-check_box = driver.find_element(By.XPATH, "//span[@class='rct-checkbox']")
-check_box.click()
+# Находим label радиокнопки "Impressive" (позиционный XPath)
+radio_label = driver.find_element(
+    By.XPATH,
+    "(//label[@class='custom-control-label'])[2]"
+)
 
-# Проверим, что чек-бокс выбран и выведем сообщение об этом
-if checkbox_input.is_selected():
-    print("Чек-бокс выбран")
+# Кликаем по radiobutton
+radio_label.click()
+
+# Проверяем состояние
+if not radio_input.is_selected():
+    print("Radio Button 'Impressive' unselected")
 else:
-    print("Чек-бокс не выбран")
+    print("Radio Button 'Impressive' selected")
 
 # Закрываем браузер
 time.sleep(3)
