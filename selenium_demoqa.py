@@ -1,8 +1,8 @@
 # Импортируем WebDriver, чтобы с ним взаимодействовать:
 # открывать браузер и производить различные действия
 import time
-
-from selenium.webdriver import ActionChains  # Импортируем ActionChains для выполнения действий мыши
+from datetime import datetime, timedelta
+from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
@@ -16,30 +16,29 @@ driver = webdriver.Chrome(
     service=ChromeService(ChromeDriverManager().install())
 )
 
-# Базовый URL для открытия
-base_url: str = 'https://demoqa.com/buttons'
+# URL для открытия
+base_url: str = 'https://demoqa.com/date-picker'
 
 # Команда get для открытия ссылки
 driver.get(base_url)
 
-# Установка размеров окна браузера
-driver.set_window_size(1920, 1080)
+# Находим поле ввода даты
+date_input = driver.find_element(By.XPATH, "//input[@id='datePickerMonthYearInput']")
 
-# Объект для выполнения действий мыши
-action = ActionChains(driver)
-
-# Находим кнопку для двойного клика
-double_click_button = driver.find_element(By.XPATH, "//button[@id='doubleClickBtn']")
-# Выполняем двойной клик по кнопке и выводим сообщение о выполнении
-action.double_click(double_click_button).perform()
-print("Произведён двойной клик")
-
-# Находим кнопку для клика правой кнопкой мыши
-right_click_button = driver.find_element(By.XPATH, "//button[@id='rightClickBtn']")
+# Очищаем поле
 time.sleep(2)
-# Выполняем клик правой кнопкой мыши и выводим сообщение о выполнении
-action.context_click(right_click_button).perform()
-print("Произведён клик по правой кнопке мыши")
+date_input.send_keys(Keys.CONTROL + "a")
+time.sleep(2)
+date_input.send_keys(Keys.DELETE)
+
+# Создадим дату на 10 дней позже
+time.sleep(2)
+later_date = datetime.now() + timedelta(days=10)
+formatted_date = later_date.strftime("%m/%d/%Y")
+
+# Вводим дату в поле
+date_input.send_keys(formatted_date)
+date_input.send_keys(Keys.ENTER)
 
 # Закрываем браузер
 time.sleep(3)
