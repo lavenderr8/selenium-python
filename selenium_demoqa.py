@@ -1,8 +1,7 @@
 # Импортируем WebDriver, чтобы с ним взаимодействовать:
 # открывать браузер и производить различные действия
 import time
-from datetime import datetime, timedelta
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver import ActionChains
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
@@ -17,28 +16,33 @@ driver = webdriver.Chrome(
 )
 
 # URL для открытия
-base_url: str = 'https://demoqa.com/date-picker'
+base_url: str = 'https://the-internet.herokuapp.com/horizontal_slider'
 
 # Команда get для открытия ссылки
 driver.get(base_url)
 
-# Находим поле ввода даты
-date_input = driver.find_element(By.XPATH, "//input[@id='datePickerMonthYearInput']")
+# Объект для взаимодействия с элементами
+actions = ActionChains(driver)
 
-# Очищаем поле
-time.sleep(2)
-date_input.send_keys(Keys.CONTROL + "a")
-time.sleep(2)
-date_input.send_keys(Keys.DELETE)
+# Находим ползунок и элемент, где отображается значение
+slider = driver.find_element(By.XPATH, "//input[@type='range']")
+slider_value_element = driver.find_element(By.ID, "range")
 
-# Создадим дату на 10 дней позже
+# Перемещаем ползунок на 2 пикселя
 time.sleep(2)
-later_date = datetime.now() + timedelta(days=10)
-formatted_date = later_date.strftime("%m/%d/%Y")
+actions.click_and_hold(slider).move_by_offset(2, 0).release().perform()
 
-# Вводим дату в поле
-date_input.send_keys(formatted_date)
-date_input.send_keys(Keys.ENTER)
+# Сравним значения ползунка: фактическое и отображаемое на странице
+actual_value = slider.get_attribute("value")
+displayed_value = slider_value_element.text
+
+# Проверим, совпадают ли значения
+assert actual_value == displayed_value, (
+    f"Ошибка: значение ползунка ({actual_value}) "
+    f"не совпадает с отображаемым ({displayed_value})"
+)
+
+print(f"Ползунок перемещён, текущее значение: {actual_value}")
 
 # Закрываем браузер
 time.sleep(3)
