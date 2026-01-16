@@ -24,25 +24,46 @@ driver.get(base_url)
 # Объект для взаимодействия с элементами
 actions = ActionChains(driver)
 
-# Находим ползунок и элемент, где отображается значение
+# Находим ползунок
 slider = driver.find_element(By.XPATH, "//input[@type='range']")
-slider_value_element = driver.find_element(By.ID, "range")
+
+time.sleep(2)
+
+# Получаем параметры ползунка
+min_value = float(slider.get_attribute("min"))  # 0
+max_value = float(slider.get_attribute("max"))  # 5
+step = float(slider.get_attribute("step"))  # 0.5
+slider_width = slider.size["width"]  # ширина в пикселях
+
+# Получаем начальное значение
+start_value = float(slider.get_attribute("value"))
+
+# Считаем, сколько шагов у ползунка
+steps_count = (max_value - min_value) / step
+
+# Считаем, сколько пикселей занимает один шаг
+pixels_per_step = slider_width / steps_count
 
 # Перемещаем ползунок на 2 пикселя
-time.sleep(2)
-actions.click_and_hold(slider).move_by_offset(2, 0).release().perform()
+pixels_to_move = 2
+actions.click_and_hold(slider).move_by_offset(pixels_to_move, 0).release().perform()
 
-# Сравним значения ползунка: фактическое и отображаемое на странице
-actual_value = slider.get_attribute("value")
-displayed_value = slider_value_element.text
+time.sleep(1)
 
-# Проверим, совпадают ли значения
-assert actual_value == displayed_value, (
-    f"Ошибка: значение ползунка ({actual_value}) "
-    f"не совпадает с отображаемым ({displayed_value})"
+# Считаем ожидаемое значение после перемещения
+expected_value = start_value + (pixels_to_move / pixels_per_step) * step
+expected_value = round(expected_value, 1)
+
+# Получаем фактическое значение
+actual_value = float(slider.get_attribute("value"))
+
+# Проверяем, совпадает ли фактическое значение с ожидаемым
+assert actual_value == expected_value, (
+    f"Ошибка: ожидалось значение {expected_value}, "
+    f"но получено {actual_value}"
 )
 
-print(f"Ползунок перемещён, текущее значение: {actual_value}")
+print(f"Ползунок был {start_value}, стал {actual_value}")
 
 # Закрываем браузер
 time.sleep(3)
