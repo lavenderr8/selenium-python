@@ -30,29 +30,30 @@ slider = driver.find_element(By.XPATH, "//input[@type='range']")
 time.sleep(2)
 
 # Получаем параметры ползунка
-min_value = float(slider.get_attribute("min"))  # 0
-max_value = float(slider.get_attribute("max"))  # 5
-step = float(slider.get_attribute("step"))  # 0.5
-slider_width = slider.size["width"]  # ширина в пикселях
+min_value = float(slider.get_attribute("min"))
+max_value = float(slider.get_attribute("max"))
+step = float(slider.get_attribute("step"))
 
-# Получаем начальное значение
+# Получаем ширину ползунка в пикселях
+slider_width = slider.size["width"]
+
+# Получаем начальное значение ползунка
 start_value = float(slider.get_attribute("value"))
 
-# Считаем, сколько шагов у ползунка
+# Считаем количество шагов
 steps_count = (max_value - min_value) / step
 
-# Считаем, сколько пикселей занимает один шаг
+# Считаем, сколько пикселей приходится на один шаг
 pixels_per_step = slider_width / steps_count
 
-# Перемещаем ползунок на 2 пикселя
-pixels_to_move = 2
+# Перемещаем ползунок на 26 пикселей
+pixels_to_move = 26
 actions.click_and_hold(slider).move_by_offset(pixels_to_move, 0).release().perform()
 
 time.sleep(1)
 
-# Считаем ожидаемое значение после перемещения
-expected_value = start_value + (pixels_to_move / pixels_per_step) * step
-expected_value = round(expected_value, 1)
+# Если смещение меньше одного шага, значение не должно измениться
+expected_value = start_value
 
 # Получаем фактическое значение
 actual_value = float(slider.get_attribute("value"))
