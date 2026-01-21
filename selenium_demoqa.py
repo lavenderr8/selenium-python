@@ -15,20 +15,38 @@ driver = webdriver.Chrome(
 )
 
 # URL для открытия
-base_url: str = 'https://lambdatest.com/selenium-playground/jquery-dropdown-search-demo'
+base_url: str = 'https://lambdatest.com/selenium-playground/simple-form-demo'
 
 # Команда get для открытия ссылки
 driver.get(base_url)
 
-# Кликнем по нашему Drop Down
-click_drop = driver.find_element(By.XPATH, "//span[@aria-labelledby='select2-country-container']")
-time.sleep(2)
-click_drop.click()
+# Создадим переменные с числовым значением и переменную их сложения
+first_value = 88
+second_value = 26
+sum_result = first_value + second_value
 
-# Выберем элемент из списка и кликнем по нему
-select_country = driver.find_element(By.XPATH, "(//li[@class='select2-results__option'][7])")
+# Вводим значение в первое поле
 time.sleep(2)
-select_country.click()
+input_first_value = driver.find_element(By.XPATH, "//input[@id='sum1']")
+input_first_value.send_keys(str(first_value))
+
+# Вводим значение во второе поле
+time.sleep(2)
+input_second_value = driver.find_element(By.XPATH, "//input[@id='sum2']")
+input_second_value.send_keys(str(second_value))
+
+# Клик по кнопке "Get Sum"
+time.sleep(2)
+get_sum_button = driver.find_element(By.XPATH, "//*[@id='gettotal']/button")
+get_sum_button.click()
+
+# Сохранили значение, отображённое в поле "Result"
+result = driver.find_element(By.XPATH, "//p[@id='addmessage']")
+
+# Проверка на соответствие ожидаемого результата с фактическим
+value_result = result.text
+assert value_result == str(sum_result)
+print("Значения совпадают")
 
 # Закрываем браузер
 time.sleep(3)
