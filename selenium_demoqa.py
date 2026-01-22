@@ -1,8 +1,8 @@
 # Импортируем WebDriver, чтобы с ним взаимодействовать:
 # открывать браузер и производить различные действия
 import time
+from faker import Faker
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
@@ -16,53 +16,23 @@ driver = webdriver.Chrome(
 )
 
 # URL для открытия
-base_url: str = 'https://www.lambdatest.com/selenium-playground/iframe-demo/'
+base_url: str = 'https://www.saucedemo.com/'
 
 # Команда get для открытия ссылки
 driver.get(base_url)
 
-# Находим iframe
-iframe = driver.find_element(By.XPATH, "//iframe[@id='iFrame1']")
-driver.switch_to.frame(iframe)
+# Установим язык, на котором будет происходить генерирование
+fake = Faker("en_US")
 
-# Обращаемся к текстовому полю
-input_pole = driver.find_element(By.XPATH, "//*[@id='__next']/div/div/div[2]")
+# Получение рандомного имени с помощью библиотеки Faker
+name = fake.first_name()
+print(f"Сгенерированное имя: {name}")
 
-# Очищаем поле
+# Ввод имени в поле Username
+username = driver.find_element(By.XPATH, "//input[@id='user-name']")
 time.sleep(2)
-input_pole.send_keys(Keys.CONTROL + "a")
-time.sleep(2)
-input_pole.send_keys(Keys.DELETE)
-
-# Вводим новый текст
-new_text = "Selenium"
-time.sleep(2)
-input_pole.send_keys(new_text)
-
-# Выделяем поле с новым текстом
-time.sleep(2)
-input_pole.send_keys(Keys.CONTROL + 'a')
-
-# Нажимаем кнопку Bold
-time.sleep(2)
-driver.find_element(By.XPATH, "//button[@title='Bold']").click()
-print("Click Bold Button")
-
-# Нажимаем кнопку Italic
-time.sleep(2)
-driver.find_element(By.XPATH, "//button[@title='Italic']").click()
-print("Click Italic Button")
-
-# Получаем текст после форматирования
-formatted_text = input_pole.text
-print(f"Стилистически изменённый текст: {formatted_text}")
-
-# Проверка, что текст не изменился
-assert formatted_text == new_text, (
-    f"Текст изменился: ожидалось '{new_text}', получено '{formatted_text}'"
-)
-
-print("Текст не изменился после редактирования")
+username.send_keys(name)
+print("Input Username")
 
 # Закрываем браузер
 time.sleep(3)
