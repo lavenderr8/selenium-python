@@ -27,26 +27,26 @@ sum_result = first_value + second_value
 
 # Вводим значение в первое поле
 time.sleep(2)
-input_first_value = driver.find_element(By.XPATH, "//input[@id='sum1']")
-input_first_value.send_keys(str(first_value))
+driver.find_element(By.XPATH, "//input[@id='sum1']").send_keys(str(first_value))
+print(f"В первое поле введено значение: {first_value}")
 
 # Вводим значение во второе поле
 time.sleep(2)
-input_second_value = driver.find_element(By.XPATH, "//input[@id='sum2']")
-input_second_value.send_keys(str(second_value))
+driver.find_element(By.XPATH, "//input[@id='sum2']").send_keys(str(second_value))
+print(f"Во второе поле введено значение: {second_value}")
 
 # Клик по кнопке "Get Sum"
 time.sleep(2)
-get_sum_button = driver.find_element(By.XPATH, "//*[@id='gettotal']/button")
-get_sum_button.click()
+driver.find_element(By.XPATH, "//*[@id='gettotal']/button").click()
 
 # Сохранили значение, отображённое в поле "Result"
-result = driver.find_element(By.XPATH, "//p[@id='addmessage']")
+value_result = driver.find_element(By.XPATH, "//p[@id='addmessage']").text
 
 # Проверка на соответствие ожидаемого результата с фактическим
-value_result = result.text
-assert value_result == str(sum_result)
-print("Значения совпадают")
+assert value_result == str(sum_result), (
+    f"Ожидаемый результат: '{sum_result}', но фактический: '{value_result}'"
+)
+print(f"Результат суммы: {value_result} – верно")
 
 # Закрываем браузер
 time.sleep(3)
