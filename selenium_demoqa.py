@@ -2,6 +2,7 @@
 # открывать браузер и производить различные действия
 import time
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
@@ -15,38 +16,53 @@ driver = webdriver.Chrome(
 )
 
 # URL для открытия
-base_url: str = 'https://lambdatest.com/selenium-playground/simple-form-demo'
+base_url: str = 'https://www.lambdatest.com/selenium-playground/iframe-demo/'
 
 # Команда get для открытия ссылки
 driver.get(base_url)
 
-# Создадим переменные с числовым значением и переменную их сложения
-first_value = 88
-second_value = 26
-sum_result = first_value + second_value
+# Находим iframe
+iframe = driver.find_element(By.XPATH, "//iframe[@id='iFrame1']")
+driver.switch_to.frame(iframe)
 
-# Вводим значение в первое поле
+# Обращаемся к текстовому полю
+input_pole = driver.find_element(By.XPATH, "//*[@id='__next']/div/div/div[2]")
+
+# Очищаем поле
 time.sleep(2)
-driver.find_element(By.XPATH, "//input[@id='sum1']").send_keys(str(first_value))
-print(f"В первое поле введено значение: {first_value}")
-
-# Вводим значение во второе поле
+input_pole.send_keys(Keys.CONTROL + "a")
 time.sleep(2)
-driver.find_element(By.XPATH, "//input[@id='sum2']").send_keys(str(second_value))
-print(f"Во второе поле введено значение: {second_value}")
+input_pole.send_keys(Keys.DELETE)
 
-# Клик по кнопке "Get Sum"
+# Вводим новый текст
+new_text = "Selenium"
 time.sleep(2)
-driver.find_element(By.XPATH, "//*[@id='gettotal']/button").click()
+input_pole.send_keys(new_text)
 
-# Сохранили значение, отображённое в поле "Result"
-value_result = driver.find_element(By.XPATH, "//p[@id='addmessage']").text
+# Выделяем поле с новым текстом
+time.sleep(2)
+input_pole.send_keys(Keys.CONTROL + 'a')
 
-# Проверка на соответствие ожидаемого результата с фактическим
-assert value_result == str(sum_result), (
-    f"Ожидаемый результат: '{sum_result}', но фактический: '{value_result}'"
+# Нажимаем кнопку Bold
+time.sleep(2)
+driver.find_element(By.XPATH, "//button[@title='Bold']").click()
+print("Click Bold Button")
+
+# Нажимаем кнопку Italic
+time.sleep(2)
+driver.find_element(By.XPATH, "//button[@title='Italic']").click()
+print("Click Italic Button")
+
+# Получаем текст после форматирования
+formatted_text = input_pole.text
+print(f"Стилистически изменённый текст: {formatted_text}")
+
+# Проверка, что текст не изменился
+assert formatted_text == new_text, (
+    f"Текст изменился: ожидалось '{new_text}', получено '{formatted_text}'"
 )
-print(f"Результат суммы: {value_result} – верно")
+
+print("Текст не изменился после редактирования")
 
 # Закрываем браузер
 time.sleep(3)
