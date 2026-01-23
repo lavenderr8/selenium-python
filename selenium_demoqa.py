@@ -1,7 +1,6 @@
 # Импортируем WebDriver, чтобы с ним взаимодействовать:
 # открывать браузер и производить различные действия
 import time
-from faker import Faker
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
@@ -16,23 +15,35 @@ driver = webdriver.Chrome(
 )
 
 # URL для открытия
-base_url: str = 'https://www.saucedemo.com/'
+base_url: str = 'https://demoqa.com/browser-windows'
 
 # Команда get для открытия ссылки
 driver.get(base_url)
 
-# Установим язык, на котором будет происходить генерирование
-fake = Faker("en_US")
-
-# Получение рандомного имени с помощью библиотеки Faker
-name = fake.first_name()
-print(f"Сгенерированное имя: {name}")
-
-# Ввод имени в поле Username
-username = driver.find_element(By.XPATH, "//input[@id='user-name']")
+# Находим кнопку New Tab и кликаем по ней
+new_tab = driver.find_element(By.XPATH, "//button[@id='tabButton']")
 time.sleep(2)
-username.send_keys(name)
-print("Input Username")
+new_tab.click()
+
+# Команда для открытия второй вкладки
+driver.switch_to.window(driver.window_handles[1])
+time.sleep(3)
+
+# Возврат на первую вкладку
+driver.switch_to.window(driver.window_handles[0])
+time.sleep(2)
+
+# Находим кнопку New Window и кликаем по ней
+new_window = driver.find_element(By.XPATH, "//button[@id='windowButton']")
+time.sleep(2)
+new_window.click()
+
+# Команда для открытия второго окна
+driver.switch_to.window(driver.window_handles[1])
+time.sleep(3)
+
+# Переключение на первое окно
+driver.switch_to.window(driver.window_handles[0])
 
 # Закрываем браузер
 time.sleep(3)
