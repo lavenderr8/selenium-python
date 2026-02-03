@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import NoSuchElementException
 
 options = webdriver.ChromeOptions()
 options.add_argument("--start-maximized")
@@ -15,35 +16,25 @@ driver = webdriver.Chrome(
 )
 
 # URL для открытия
-base_url: str = 'https://demoqa.com/browser-windows'
+base_url: str = 'https://demoqa.com/dynamic-properties'
 
 # Команда get для открытия ссылки
 driver.get(base_url)
 
-# Находим кнопку New Tab и кликаем по ней
-new_tab = driver.find_element(By.XPATH, "//button[@id='tabButton']")
-time.sleep(2)
-new_tab.click()
+# Пробуем найти нужную нам кнопку, но получаем ошибку
+try:
+    button_visible = driver.find_element(By.XPATH, "//button[@id='visibleAfter']")
+    button_visible.click()
 
-# Команда для открытия второй вкладки
-driver.switch_to.window(driver.window_handles[1])
-time.sleep(3)
-
-# Возврат на первую вкладку
-driver.switch_to.window(driver.window_handles[0])
-time.sleep(2)
-
-# Находим кнопку New Window и кликаем по ней
-new_window = driver.find_element(By.XPATH, "//button[@id='windowButton']")
-time.sleep(2)
-new_window.click()
-
-# Команда для открытия второго окна
-driver.switch_to.window(driver.window_handles[1])
-time.sleep(3)
-
-# Переключение на первое окно
-driver.switch_to.window(driver.window_handles[0])
+# Указываем ожидаемое исключение
+except NoSuchElementException:
+    print("Элемент не найден: получен NoSuchElementException")
+    time.sleep(5)
+    driver.refresh()  # Обновляем страницу
+    time.sleep(5)
+    button_visible = driver.find_element(By.XPATH, "//button[@id='visibleAfter']")  # Заново пытаемся найти кнопку
+    button_visible.click()
+    print("Click Visible After 5 Seconds Button")
 
 # Закрываем браузер
 time.sleep(3)
