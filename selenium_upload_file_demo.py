@@ -43,18 +43,16 @@ file_name: str = "LambdaTest.pdf"
 file_path: str = os.path.join(path_download, file_name)
 
 # Проверка, что файл скачался
-assert os.access(file_path, os.F_OK) == True
+assert os.access(file_path, os.F_OK)
 print("Файл в директории")
 time.sleep(2)
 
 # Проверка, что файл не пустой
 files = glob.glob(os.path.join(path_download, "*.*"))
+
 for file in files:
-    a = os.path.getsize(file)
-    if a > 10:
-        print("Файл не пуст")
-    else:
-        print("Файл пуст")
+    assert os.path.getsize(file) > 0
+    print("Файл не пуст")
 
 # Закрываем браузер
 time.sleep(3)
