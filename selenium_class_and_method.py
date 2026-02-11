@@ -6,16 +6,17 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
-options = webdriver.ChromeOptions()
-options.add_argument("--start-maximized")
-
 
 # Создаём общий класс для теста
 class SauceDemoTest:
 
-    # Метод для инициализация URL и драйвера
+    # Метод для инициализации URL и драйвера
     def __init__(self, url: str):
         self.url = url
+
+        options = webdriver.ChromeOptions()
+        options.add_argument("--start-maximized")
+
         self.driver: webdriver.Chrome = webdriver.Chrome(
             service=ChromeService(ChromeDriverManager().install()),
             options=options
@@ -31,7 +32,7 @@ class SauceDemoTest:
         self.driver.quit()
 
 
-# Создаём экземпляр класса
+# Использование класса
 test_instance = SauceDemoTest("https://www.saucedemo.com/")
 test_instance.open_site()
 test_instance.close_browser()
