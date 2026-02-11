@@ -13,27 +13,25 @@ options.add_argument("--start-maximized")
 # Создаём общий класс для теста
 class SauceDemoTest:
 
-    # Метод для запуска браузера и открытия сайта
-    def select_product(self):
-        # Создаем экземпляр Chrome WebDriver
-        self.driver = webdriver.Chrome(
+    # Метод для инициализация URL и драйвера
+    def __init__(self, url: str):
+        self.url = url
+        self.driver: webdriver.Chrome = webdriver.Chrome(
             service=ChromeService(ChromeDriverManager().install()),
             options=options
         )
 
-        # URL для открытия
-        base_url: str = "https://www.saucedemo.com/"
+    # Метод для открытия сайта по переданному URL
+    def open_site(self):
+        self.driver.get(self.url)
 
-        # Открываем сайт
-        self.driver.get(base_url)
-
-        # Закрываем браузер
-        time.sleep(3)
+    # Метод для закрытия сайта
+    def close_browser(self):
+        time.sleep(2)
         self.driver.quit()
 
 
 # Создаём экземпляр класса
-start_test = SauceDemoTest()
-
-# Вызываем метод
-start_test.select_product()
+test_instance = SauceDemoTest("https://www.saucedemo.com/")
+test_instance.open_site()
+test_instance.close_browser()
