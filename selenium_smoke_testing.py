@@ -8,37 +8,37 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
-options = webdriver.ChromeOptions()
-options.add_argument("--start-maximized")
-
 
 # Создаём общий класс для теста
 class SauceDemoTest:
 
-    # Метод для запуска браузера и выполнения теста
-    def select_product(self):
-        # Создаем экземпляр Chrome WebDriver
+    # Метод для инициализация URL и драйвера
+    def __init__(self, url: str):
+        self.url = url
+
+        options = webdriver.ChromeOptions()
+        options.add_argument("--start-maximized")
+
         self.driver: webdriver.Chrome = webdriver.Chrome(
             service=ChromeService(ChromeDriverManager().install()),
             options=options
         )
 
-        # URL для открытия
-        base_url: str = "https://www.saucedemo.com/"
+    # Метод для открытия сайта по переданному URL
+    def open_site(self):
+        self.driver.get(self.url)
 
-        # Открываем сайт
-        self.driver.get(base_url)
-
-        # Авторизируемся на сайте
+    # Метод для авторизации пользователя на сайте
+    def login(self, username: str, password: str):
         user_name = WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='user-name']")))
         time.sleep(2)
-        user_name.send_keys("standard_user")
+        user_name.send_keys(username)
         print("Input Username")
 
         user_password = WebDriverWait(self.driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[@id='password']")))
         time.sleep(2)
-        user_password.send_keys("secret_sauce")
+        user_password.send_keys(password)
         print("Input Password")
 
         login_button = WebDriverWait(self.driver, 30).until(
@@ -47,7 +47,8 @@ class SauceDemoTest:
         login_button.click()
         print("Click Login Button")
 
-        # Выбираем товар и переходим в корзину
+    # Метод для выбора товара и перехода в корзину
+    def add_product_to_cart(self):
         select_product = WebDriverWait(self.driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[@id='add-to-cart-sauce-labs-backpack']")))
         time.sleep(2)
@@ -60,20 +61,24 @@ class SauceDemoTest:
         go_to_cart.click()
         print("Enter Shopping Cart")
 
-        # Проверка, что мы находимся на странице корзины
+    # Метод для проверки, что мы находимся на странице корзины
+    def check_cart(self):
         your_cart = WebDriverWait(self.driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, "//*[@id='header_container']/div[2]/span")))
         value_your_cart = your_cart.text
         assert value_your_cart == "Your Cart"
         print("Test Completed")
 
-        # Закрываем браузер
-        time.sleep(3)
+    # Метод для закрытия сайта
+    def close_browser(self):
+        time.sleep(2)
         self.driver.quit()
 
 
-# Создаём экземпляр класса
-start_test = SauceDemoTest()
-
-# Вызываем метод
-start_test.select_product()
+# Использование класса
+test_instance = SauceDemoTest("https://www.saucedemo.com/")
+test_instance.open_site()
+test_instance.login("standard_user", "secret_sauce")
+test_instance.add_product_to_cart()
+test_instance.check_cart()
+test_instance.close_browser()
