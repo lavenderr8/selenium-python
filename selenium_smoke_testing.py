@@ -15,14 +15,22 @@ class SauceDemoTest:
     # Метод для инициализация URL и драйвера
     def __init__(self, url: str):
         self.url = url
+        self.driver = self._init_driver()  # Инициализация драйвера через статический метод
 
+    # Статический метод для создания и настройки драйвера
+    @staticmethod
+    def _init_driver() -> webdriver.Chrome:
+        # Настраиваем опции браузера
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized")
 
-        self.driver: webdriver.Chrome = webdriver.Chrome(
+        # Создаём экземпляр драйвера
+        driver = webdriver.Chrome(
             service=ChromeService(ChromeDriverManager().install()),
             options=options
         )
+
+        return driver
 
     # Метод для открытия сайта по переданному URL
     def open_site(self):
@@ -30,7 +38,8 @@ class SauceDemoTest:
 
     # Метод для авторизации пользователя на сайте
     def login(self, username: str, password: str):
-        user_name = WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='user-name']")))
+        user_name = WebDriverWait(self.driver, 30).until(
+            EC.element_to_be_clickable((By.XPATH, "//*[@id='user-name']")))
         time.sleep(2)
         user_name.send_keys(username)
         print("Input Username")
