@@ -1,5 +1,4 @@
-# Импортируем WebDriver, чтобы с ним взаимодействовать:
-# открывать браузер и производить различные действия
+# Импортируем необходимые библиотеки
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -7,15 +6,19 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
+from login_page import LoginPage
 
 
 # Создаём общий класс для теста
 class SauceDemoTest:
 
-    # Метод для инициализация URL и драйвера
+    # Метод для инициализации URL и драйвера
     def __init__(self, url: str):
         self.url = url
-        self.driver = self._init_driver()  # Инициализация драйвера через статический метод
+        self.driver = self._init_driver()
+
+        # Создаём объект страницы логина
+        self.login_page = LoginPage(self.driver)
 
     # Статический метод для создания и настройки драйвера
     @staticmethod
@@ -36,25 +39,9 @@ class SauceDemoTest:
     def open_site(self):
         self.driver.get(self.url)
 
-    # Метод для авторизации пользователя на сайте
+    # Метод авторизации
     def login(self, username: str, password: str):
-        user_name = WebDriverWait(self.driver, 30).until(
-            EC.element_to_be_clickable((By.XPATH, "//*[@id='user-name']")))
-        time.sleep(2)
-        user_name.send_keys(username)
-        print("Input Username")
-
-        user_password = WebDriverWait(self.driver, 30).until(
-            EC.element_to_be_clickable((By.XPATH, "//*[@id='password']")))
-        time.sleep(2)
-        user_password.send_keys(password)
-        print("Input Password")
-
-        login_button = WebDriverWait(self.driver, 30).until(
-            EC.element_to_be_clickable((By.XPATH, "//*[@id='login-button']")))
-        time.sleep(2)
-        login_button.click()
-        print("Click Login Button")
+        self.login_page.authorization(username, password)
 
     # Метод для выбора товара и перехода в корзину
     def add_product_to_cart(self):
